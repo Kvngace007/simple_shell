@@ -10,7 +10,7 @@ void assign_lineptr(Buffer* buffer, char* line, size_t num_chars);
  */
 void allocate_buffer(Buffer* buffer)
 {
-    buffer->n = 128; // Initial buffer size
+    buffer->n = 128;
     buffer->lineptr = (char*)malloc(buffer->n);
     if(buffer->lineptr == NULL)
     {
@@ -40,21 +40,23 @@ void assign_lineptr(Buffer* buffer, char* line, size_t num_chars)
  */
 size_t _getline(Buffer* buffer, FILE* stream)
 {
+    int ch;
+    char* line;
+    size_t num_chars;
+
+    line = buffer->lineptr;
+    num_chars = 0;
     if(buffer == NULL || stream == NULL)
     {
         errno = EINVAL;
-        return (size_t)-1; // Return a special value to indicate error
+        return (size_t)-1;
     }
-
-    size_t num_chars = 0; // Number of characters read
-    int ch;
 
     if(buffer->lineptr == NULL)
     {
         allocate_buffer(buffer);
     }
 
-    char* line = buffer->lineptr;
 
     while((ch = fgetc(stream)) != EOF)
     {
@@ -81,7 +83,7 @@ size_t _getline(Buffer* buffer, FILE* stream)
 
     if(num_chars == 0)
     {
-        return (size_t)-1; // Return a special value to indicate no data read
+        return (size_t)-1; 
     }
 
     line[num_chars] = '\0';

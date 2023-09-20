@@ -23,10 +23,9 @@ int exit_shell(void)
  */
 int env_shell(void)
 {
-    extern char** environ;  // Access to the environment variables
-
-    // Loop through and print each environment variable
-    for(char** env = environ; *env; env++)
+    extern char** environ; 
+    char** env;
+    for(env = environ; *env; env++)
     {
         printf("%s\n", *env);
     }
@@ -47,9 +46,9 @@ int setenv_shell(const char* name, const char* value, int overwrite)
     if(setenv(name, value, overwrite) != 0)
     {
         fprintf(stderr, "setenv: Error setting environment variable %s\n", name);
-        return -1; // Return an error code
+        return -1;
     }
-    return 0; // Success
+    return 0;
 }
 
 /**
@@ -63,9 +62,9 @@ int unsetenv_shell(const char* name)
     if(unsetenv(name) != 0)
     {
         fprintf(stderr, "unsetenv: Error unsetting environment variable %s\n", name);
-        return -1; // Return an error code
+        return -1;
     }
-    return 0; // Success
+    return 0;
 }
 
 /**
@@ -76,50 +75,44 @@ int unsetenv_shell(const char* name)
 */
 int cd_shell(const char* path)
 {
-    char* previous_dir = NULL;
-
-    // Get the current working directory
     char current_dir[1024];
     if(getcwd(current_dir, sizeof(current_dir)) == NULL)
     {
         perror("getcwd");
-        return -1; // Return an error code
+        return -1; 
     }
 
-    // If no path is provided or the path is "-", go to the previous directory
     if(path == NULL || strcmp(path, "-") == 0)
     {
-        path = getenv("OLDPWD"); // Get the previous directory from the environment variable
+        path = getenv("OLDPWD");
         if(path == NULL)
         {
             fprintf(stderr, "cd: OLDPWD not set\n");
-            return -1; // Return an error code
+            return -1; 
         }
-        printf("%s\n", path); // Print the directory we're changing to
+        printf("%s\n", path);
     }
 
-    // Change to the specified directory
+
     if(chdir(path) != 0)
     {
         perror("chdir");
-        return -1; // Return an error code
+        return -1;
     }
 
-    // Update the environment variable PWD
     if(setenv("PWD", current_dir, 1) != 0)
     {
         perror("setenv");
-        return -1; // Return an error code
+        return -1;
     }
 
-    // Update the environment variable OLDPWD
     if(setenv("OLDPWD", current_dir, 1) != 0)
     {
         perror("setenv");
-        return -1; // Return an error code
+        return -1;
     }
 
-    return 0; // Success
+    return 0;
 }
 
 

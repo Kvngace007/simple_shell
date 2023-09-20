@@ -1,22 +1,20 @@
 #include "shell.h"
 
-int execute(char** args, char** front)
+int execute(char** args)
 {
-	int ret = 0, flag = 0, status;
+	int ret = 0, flag = 0;
 	char *command = args[0];
 
-	//set flag  = 1, when args[0] is not / or .
 	if(command[0] != '/' && command[0] != '.')
 	{
 		flag = 1;
-		//command = get_location(command);
 	}
 
 	if(!command || (access(command, F_OK) == -1))
 	{
 		if(errno == EACCES)
 		{
-			//ret = create_error(args, 126);
+			
 		}
 	}
 
@@ -37,24 +35,23 @@ int execute(char** args, char** front)
 int main(void)
 {
     char* line;
+    int read;
     size_t line_len = 0;
-    int status = 0;
-
     while(1)
     {
-        prompt(); // Display the shell prompt
-        size_t read = getline(&line, &line_len, stdin);
+        prompt();
+        read = getline(&line, &line_len, stdin);
 
         if(read == -1)
         {
-            if(feof(stdin)) // End of file (Ctrl+D)
+            if(feof(stdin))
             {
                 printf("\n");
                 free(line);
-                exit_shell(EXIT_SUCCESS);
+                exit_shell();
             }
             perror("getline");
-            exit_shell(EXIT_FAILURE);
+            exit_shell();
         }
 
         if(read > 1)
@@ -67,7 +64,7 @@ int main(void)
             if(strcmp(line, "exit") == 0)
             {
                 free(line);
-                exit_shell(EXIT_SUCCESS);
+                exit_shell();
             }
         }
     }

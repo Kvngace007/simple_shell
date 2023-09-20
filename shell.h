@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include <sys/wait.h>
 
 #ifndef F_OK
 #define F_OK 0
@@ -59,12 +59,12 @@ void prompt(void);
 size_t read_command(Buffer* buffer);
 void execute_command(char* command);
 
-//environment functions
+
 char** copy_environment(void);
 void free_environment(void);
 char** get_environment_variable(const char* name);
 
-//string functions
+
 int _strlen(const char* s);
 char* _strcpy(char* dest, const char* src);
 char* _strcat(char* dest, const char* src);
@@ -74,7 +74,7 @@ int _strspn(char* s, char* accept);
 int _strcmp(char* s1, char* s2);
 int _strncmp(const char* s1, const char* s2, size_t n);
 
-//built-in functions
+
 int exit_shell(void);
 int env_shell(void);
 int setenv_shell(const char* name, const char* value, int overwrite);
