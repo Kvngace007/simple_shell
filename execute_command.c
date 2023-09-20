@@ -4,7 +4,7 @@
  * execute_command - Execute a user command.
  * @command: The command to execute.
  */
-void execute_command(const char* command)
+void execute_command(char* command)
 {
     // Tokenize the command to separate the program name from arguments
     char* token = strtok((char*)command, " \t\n");

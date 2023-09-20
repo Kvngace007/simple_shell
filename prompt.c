@@ -1,4 +1,3 @@
-
 #include "shell.h"
 
 /**
@@ -6,6 +5,6 @@
  */
 void prompt(void)
 {
-    printf("($) ");
+	write(1, "($) ", 2);
 }
 
